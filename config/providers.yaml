@@ -1,0 +1,55 @@
+# Urutan list = urutan fallback. Provider paling atas dicoba paling dulu.
+# Semua endpoint di bawah kompatibel format OpenAI, jadi dipanggil pakai satu client yang sama.
+#
+# PENTING: nama model & limit di provider gratis suka berubah tanpa pemberitahuan.
+# Kalau ada tier yang tiba-tiba selalu gagal, cek dulu apakah nama model masih aktif
+# di dokumentasi resmi provider itu sebelum curiga ke kode.
+
+tiers:
+  - name: gemini
+    base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+    model: "gemini-2.5-flash"
+    api_keys_env:
+      - GEMINI_API_KEY_1
+      - GEMINI_API_KEY_2
+      - GEMINI_API_KEY_3
+
+  - name: groq
+    base_url: "https://api.groq.com/openai/v1"
+    model: "llama-3.3-70b-versatile"
+    api_keys_env:
+      - GROQ_API_KEY_1
+      - GROQ_API_KEY_2
+      - GROQ_API_KEY_3
+
+  - name: openrouter
+    base_url: "https://openrouter.ai/api/v1"
+    model: "deepseek/deepseek-r1:free"
+    api_keys_env:
+      - OPENROUTER_API_KEY_1
+      - OPENROUTER_API_KEY_2
+
+  - name: cerebras
+    base_url: "https://api.cerebras.ai/v1"
+    model: "llama-3.3-70b"
+    api_keys_env:
+      - CEREBRAS_API_KEY_1
+
+  # Tier opsional. BEDA SIFAT dari 4 tier di atas -- baca README bagian
+  # "Soal Claude" sebelum isi ini. Ringkasnya: Claude tidak punya kuota
+  # gratis harian yang isi ulang sendiri seperti Gemini/Groq. Yang ada
+  # cuma kredit trial ~$5 SEKALI PAKAI per akun (butuh verifikasi nomor
+  # HP, bukan kartu). Begitu habis, key ini bakal mulai gagal terus
+  # sampai diisi ulang lewat billing -- itu wajar, bukan bug.
+  # Tetap ditaruh di sini (bukan cuma langsung dihapus) karena dipakai
+  # khusus oleh agent "coding" yang query-nya jarang, jadi kredit $5
+  # bisa awet. Kalau tidak diisi, tier ini otomatis dilewati router.
+  - name: claude
+    base_url: "https://api.anthropic.com/v1/"
+    model: "claude-haiku-4-5"
+    api_keys_env:
+      - CLAUDE_API_KEY_1
+      - CLAUDE_API_KEY_2
+      - CLAUDE_API_KEY_3
+      - CLAUDE_API_KEY_4
+      - CLAUDE_API_KEY_5
